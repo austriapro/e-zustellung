@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by Christian Baumann (baumann.at - concepts & solutions) -->
+<xs:schema xmlns="http://www.e-zustellung.at/namespaces/ed_delivery_bulk_20150924" xmlns:zuse="http://www.e-zustellung.at/namespaces/ed_delivery_20150924" xmlns:zkopf="http://www.e-zustellung.at/namespaces/ed_directory_20150924" xmlns:edbase="http://www.e-zustellung.at/namespaces/ed_base_20150924" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://www.e-zustellung.at/namespaces/bulk-query_20140915" targetNamespace="http://www.e-zustellung.at/namespaces/ed_delivery_bulk_20150924" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.e-zustellung.at/namespaces/ed_delivery_20150924" schemaLocation="ed_delivery_20150924.xsd"/>
+	<xs:import namespace="http://www.e-zustellung.at/namespaces/ed_directory_20150924" schemaLocation="ed_directory_20150924.xsd"/>
+	<xs:import namespace="http://www.e-zustellung.at/namespaces/ed_base_20150924" schemaLocation="ed_base_20150924.xsd"/>
+	<!-- Bulk Query Request -->
+	<xs:element name="BulkRequest" type="BulkRequestType"/>
+	<xs:complexType name="BulkRequestType">
+		<xs:sequence>
+			<xs:element name="DeliveryQuality" type="zuse:deliveryTypeType" minOccurs="0"/>
+			<xs:element name="DocumentClass" type="zuse:documentClassType" minOccurs="0"/>
+			<xs:element name="DocumentFormats" type="DocumentFormatsType" minOccurs="0"/>
+			<xs:element name="Query" type="QueryType" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="BulkQueryIdType" use="required"/>
+		<xs:attribute name="isSearch" type="xs:boolean" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DocumentFormatsType">
+		<xs:sequence>
+			<xs:element name="DocumentFormat" type="zuse:token255" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="all" type="xs:boolean" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="QueryType">
+		<xs:choice>
+			<xs:element name="Identification" type="edbase:IDType"/>
+			<xs:element name="Person" type="edbase:PersonDataType"/>
+			<!-- Other identifiers (person data) may be added here. -->
+		</xs:choice>
+		<xs:attribute name="id" type="QueryIdType" use="required"/>
+	</xs:complexType>
+	<!-- Bulk Query Response -->
+	<xs:element name="BulkResponse" type="BulkResponseType"/>
+	<xs:complexType name="BulkResponseType">
+		<xs:choice>
+			<xs:element name="Servers" type="ServerType" maxOccurs="unbounded"/>
+			<xs:element name="Errors" type="edbase:ErrorsType"/>
+		</xs:choice>
+		<xs:attribute name="id" type="BulkQueryIdType" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ServerType">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element name="Server" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ZDName" type="xs:string" minOccurs="0"/>
+							<xs:element name="ZUSEUrlID" type="xs:string"/>
+							<xs:element name="Status" type="xs:int"/>
+							<xs:element name="HeadToken" type="xs:string" minOccurs="0"/>
+							<xs:element name="Errors" type="edbase:ErrorsType" minOccurs="0"/>
+							<xs:element name="Result" type="zkopf:resultType" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:element name="Errors" type="edbase:ErrorsType"/>
+		</xs:choice>
+		<xs:attribute name="id" type="xs:int" use="optional"/>
+	</xs:complexType>
+	<!-- ID Type Definitions -->
+	<xs:simpleType name="BulkQueryIdType">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="QueryIdType">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

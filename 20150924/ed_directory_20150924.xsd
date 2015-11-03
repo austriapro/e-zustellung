@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.e-zustellung.at/namespaces/ed_directory_20150924" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:edbase="http://www.e-zustellung.at/namespaces/ed_base_20150924" targetNamespace="http://www.e-zustellung.at/namespaces/ed_directory_20150924" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.e-zustellung.at/namespaces/ed_base_20150924" schemaLocation="ed_base_20150924.xsd"/>
+	<xs:element name="DeliveryResult" type="DeliveryResultType"/>
+	<xs:complexType name="DeliveryResultType">
+		<xs:choice>
+			<xs:element name="Success">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:sequence maxOccurs="unbounded">
+							<xs:element name="DeliveryServer" type="DeliveryInformationType"/>
+						</xs:sequence>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Errors" type="edbase:ErrorsType"/>
+		</xs:choice>
+		<xs:attribute name="ID"/>
+	</xs:complexType>
+	<xs:complexType name="DeliveryInformationType">
+		<xs:all>
+			<xs:element name="HeadToken"/>
+			<xs:element name="edID"/>
+			<xs:element name="ZUSEUrlID"/>
+			<xs:element name="Parameter" type="edbase:ParameterType"/>
+			<!--			<xs:element name="edAcceptedFormats"/>
+			<xs:element name="edAcceptedClasses"/>
+			<xs:element name="edAcceptedTypes"/>
+			<xs:element name="edSupportedIDTypes"/>   -->
+			<xs:element name="Certificate" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<!--Ergebnis einer Suchabfrage -->
+	<xs:element name="SearchResult" type="SearchResultType"/>
+	<xs:complexType name="resultType">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="HeadToken" type="xs:string" minOccurs="0"/>
+			<xs:element name="Person" type="edbase:PersonDataType"/>
+			<xs:element name="Parameter" type="edbase:ParameterType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SearchResultType">
+		<xs:sequence>
+			<xs:element name="Server" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ZDName" minOccurs="0"/>
+						<xs:element name="ZUSEUrlID"/>
+						<xs:element name="Status"/>
+						<xs:element name="Result" type="resultType" minOccurs="0"/>
+						<xs:element name="Errors" type="edbase:ErrorsType" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
